@@ -1,0 +1,236 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Verification | SF-Bank</title>
+    <style>
+        /* === Copy all styles from index.html exactly (including header/footer) === */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; line-height:1.6; color:#333; background:#f8fafc; }
+        .container { width:90%; max-width:1200px; margin:0 auto; padding:0 15px; }
+        .btn { display:inline-block; background:#0a4b7a; color:white; padding:10px 24px; border-radius:5px; text-decoration:none; font-weight:600; transition:background 0.3s; border:none; cursor:pointer; }
+        .btn:hover { background:#0e5f9e; }
+        .btn-outline { background:transparent; border:2px solid #0a4b7a; color:#0a4b7a; }
+        .btn-outline:hover { background:#0a4b7a; color:white; }
+        .section-title { font-size:2rem; color:#0a4b7a; margin-bottom:1rem; text-align:center; }
+        .section-subtitle { text-align:center; color:#555; max-width:700px; margin:0 auto 3rem auto; }
+        header { background:white; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:sticky; top:0; z-index:100; }
+        nav { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; }
+        .logo a { display:flex; align-items:center; gap:8px; font-size:2.8rem; font-weight:700; text-decoration:none; color:#339e57; background:linear-gradient(135deg,#839ab7,#d1c8b5,#5947aa); -webkit-background-clip:text; background-clip:text; transition:text-shadow 1.3s; }
+        .logo a:hover { text-shadow:0 0 15px rgb(55,61,239),0 0 30px rgba(245,217,183,0.9),0 0 45px rgba(171,217,148,0.7),0 0 60px rgba(246,237,187,0.5); }
+        .star-icon { font-size:2.2rem; line-height:2; filter:drop-shadow(0 0 8px rgb(11,25,158)); }
+        .nav-menu { display:flex; list-style:none; gap:2rem; align-items:center; }
+        .nav-menu a { text-decoration:none; color:#333; font-weight:500; transition:color 0.3s; }
+        .nav-menu a:hover, .nav-menu a.active { color:#0a4b7a; }
+        .nav-menu .btn { color:white; padding:8px 20px; }
+
+        /* Page-specific styles for verification */
+        .page-content { padding:4rem 0; min-height:60vh; }
+        .verify-card {
+            max-width: 550px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #eaeef2;
+            text-align: center;
+        }
+        .code-display {
+            background: #f0f4f8;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 2.2rem;
+            letter-spacing: 4px;
+            border: 1px dashed #0a4b7a;
+            color: #0a4b7a;
+            font-weight: bold;
+        }
+        .code-display span {
+            display: block;
+            line-height: 1.4;
+        }
+        .input-group {
+            margin: 2rem 0 1.5rem;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: border 0.3s;
+        }
+        .input-group input:focus {
+            border-color: #0a4b7a;
+            outline: none;
+        }
+        .message {
+            margin-top: 1.5rem;
+            font-weight: 600;
+            min-height: 2rem;
+        }
+        .success { color: #2e7d32; }
+        .error { color: #c62828; }
+        .refresh-btn {
+            background: none;
+            border: none;
+            color: #0a4b7a;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .refresh-btn:hover {
+            color: #0e5f9e;
+        }
+
+        footer { background:#1f2e3a; color:#cfddee; padding:3rem 0 1.5rem; }
+        .footer-content { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; margin-bottom:2rem; }
+        .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
+        .footer-links a { color:#cfddee; text-decoration:none; }
+        .footer-links a:hover { color:white; }
+        .copyright { text-align:center; padding-top:2rem; border-top:1px solid #3a4c5c; font-size:0.9rem; }
+
+        @media (max-width:768px) {
+            .nav-menu { gap:1rem; flex-wrap:wrap; justify-content:center; }
+            .verify-card { padding:1.5rem; }
+            .code-display { font-size:1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        <span class="star-icon">★</span> SF-Bank
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'checking' %}">Checking</a></li>
+                    <li><a href="{% url 'saving' %}">Savings</a></li>
+                    <li><a href="{% url 'lending' %}">Lending</a></li>
+                    <li><a href="{% url 'rates' %}">Rates</a></li>
+                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
+                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="page-content">
+            <div class="container">
+                <div class="verify-card">
+                    <!-- Main heading exactly as in the screenshot -->
+                    <h1 class="section-title">SF-BANK</h1>
+                    <p class="section-subtitle" style="margin-bottom:1rem;">Please confirm you are not a robot by entering the generated code below. This security verification step ensures safe access to your SF-BANK account.</p>
+
+                    <!-- Dynamic code display area -->
+                    <div class="code-display">
+                        <span id="codePart1">YBNL04</span>
+                        <span id="codePart2">VHYCGO</span>
+                    </div>
+
+                    <!-- Input field and verify button -->
+                    <div class="input-group">
+                        <input type="text" id="verifyInput" placeholder="Enter the code exactly as shown" autocomplete="off">
+                    </div>
+                    <button class="btn" id="verifyBtn">Verify Code</button>
+                    <button class="refresh-btn" id="refreshBtn">⟳ Generate new code</button>
+
+                    <!-- Message area for verification result -->
+                    <div id="message" class="message"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <a href="{% url 'home' %}" style="color: white;">SF-BANK</a>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                    <li><a href="{% url 'security' %}">Security</a></li>
+                    <li><a href="{% url 'location' %}">Locations</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SF-BANK. All rights reserved. Member FDIC. Equal Housing Lender.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to generate a random alphanumeric string (uppercase letters + digits)
+        function generateRandomCode(length = 6) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        // Initialize or refresh codes
+        function refreshCodes() {
+            const part1 = generateRandomCode(6);
+            const part2 = generateRandomCode(6);
+            document.getElementById('codePart1').textContent = part1;
+            document.getElementById('codePart2').textContent = part2;
+            // Clear input and message
+            document.getElementById('verifyInput').value = '';
+            document.getElementById('message').innerHTML = '';
+        }
+
+        // Verify entered code
+        function verifyCode() {
+            const part1 = document.getElementById('codePart1').textContent;
+            const part2 = document.getElementById('codePart2').textContent;
+            const expectedCode = part1 + part2; // combine exactly as displayed
+            const enteredCode = document.getElementById('verifyInput').value.trim();
+
+            const messageDiv = document.getElementById('message');
+            if (enteredCode === expectedCode) {
+                messageDiv.innerHTML = '<span class="success">✓ Verification successful! Redirecting...</span>';
+                // Simulate redirect or further action (e.g., to dashboard)
+                setTimeout(() => {
+                    window.location.href = "{% url 'home' %}"; // or wherever successful verification leads
+                }, 1500);
+            } else {
+                messageDiv.innerHTML = '<span class="error">✗ Incorrect code. Please try again.</span>';
+            }
+        }
+
+        // Attach event listeners after DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial codes (optional, already in HTML but we can randomize on load)
+            // Uncomment next line if you want random codes on every page load:
+            // refreshCodes();
+
+            document.getElementById('verifyBtn').addEventListener('click', verifyCode);
+            document.getElementById('refreshBtn').addEventListener('click', refreshCodes);
+
+            // Also allow Enter key in input field
+            document.getElementById('verifyInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyCode();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

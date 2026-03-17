@@ -1,0 +1,524 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STAR FORD  Bank - Personal Banking</title>
+    <style>
+        /* === Modern CSS Reset & Base Styles === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+        }
+
+        /* === Reusable Utility Classes === */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #0a4b7a;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0e5f9e;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #0a4b7a;
+            color: #0a4b7a;
+        }
+
+        .btn-outline:hover {
+            background-color: #0a4b7a;
+            color: white;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #0a4b7a;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+        }
+
+        /* === Header & Navigation === */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        /* Updated Logo CSS with Ultra View Effect */
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #339e57; /* Base color becomes white to let the gradient and glow shine */
+    background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-wrap: inherit;
+    transition: text-shadow 1.3s ease;
+}
+
+.logo a:hover {
+    text-shadow: 
+        0 0 15px rgb(55, 61, 239),
+        0 0 30px rgba(245, 217, 183, 0.9),
+        0 0 45px rgba(171, 217, 148, 0.7),
+        0 0 60px rgba(246, 237, 187, 0.5);
+}
+
+.star-icon {
+    font-size: 2.2rem; /* Slightly larger star for emphasis */
+    line-height: 2;
+    filter: drop-shadow(0 0 8px rgb(11, 25, 158));
+}
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: #afbcc5;
+        }
+
+        .nav-menu .btn {
+            color: white;
+            padding: 8px 20px;
+        }
+
+        /* === Hero Section === */
+        .hero {
+            background: linear-gradient(135deg, #e6f0f9 0%, #ffffff 100%);
+            padding: 4rem 0;
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+        .bank-load {
+            height: 350px;
+        }
+
+        .hero-text h1 {
+            font-size: 2.5rem;
+            color: #0a4b7a;
+            margin-bottom: 1rem;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #444;
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            background-image: url("/static/logo.avif");
+            flex: 1;
+            text-align: center;
+        }
+
+        /* === Products Grid Section === */
+        .products {
+            padding: 4rem 0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.8rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #eaeef2;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .product-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-card h3 {
+            color: #0a4b7a;
+            margin-bottom: 0.8rem;
+            font-size: 1.4rem;
+        }
+
+        .product-card p {
+            color: #555;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .card-link {
+            text-decoration: none;
+            font-weight: 600;
+            color: #0a4b7a;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        /* === Features Section (Online & Mobile Banking) === */
+        .features {
+            background-color: #eef3f8;
+            padding: 4rem 0;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item h3 {
+            color: #0a4b7a;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item p {
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .feature-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* === Footer === */
+        footer {
+            background-color: #1f2e3a;
+            color: #cfddee;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #cfddee;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #3a4c5c;
+            font-size: 0.9rem;
+        }
+
+        /* === Responsive Design === */
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <!-- Updated Logo HTML -->
+<div class="logo">
+    <a href="{% url 'home' %}">
+        <span class="star-icon">★</span> SF-Bank
+    </a>
+</div>
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}" class="active">Home</a></li>
+                    <li><a href="{% url 'checking' %}">Checking</a></li>
+                    <li><a href="{% url 'saving' %}">Savings</a></li>
+                    <li><a href="{% url 'lending' %}">Lending</a></li>
+                    <li><a href="{% url 'rates' %}">Rates</a></li>
+                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
+                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <h1>Personal Banking Solutions from SF-BANK</h1>
+                    <p>Find the right account for your needs from our wide selection of Personal Banking products! Our friendly, knowledgeable staff are here to help.</p>
+                    <a href="schedule.html" class="btn">Schedule an appointment →</a>
+                </div>
+                <div>
+                    <img class="bank-load" src="{% static 'img/bank-load.png' %}" alt="">
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Grid Section -->
+        <section class="products">
+            <div class="container">
+                <h2 class="section-title">Personal deposit and lending products</h2>
+                <p class="section-subtitle">From a top Connecticut bank with 150 years of foundation, responsible banking, and a drive to innovate.</p>
+                
+                <div class="products-grid">
+                    <!-- Checking -->
+                    <div class="product-card">
+                        <div class="product-icon">💳</div>
+                        <h3>Checking</h3>
+                        <p>Maximize your money and get great services with our Checking accounts!</p>
+                        <a href="#" class="card-link">Explore Checking →</a>
+                    </div>
+
+                    <!-- Savings -->
+                    <div class="product-card">
+                        <div class="product-icon">💰</div>
+                        <h3>Savings</h3>
+                        <p>Whether for a rainy day, school, or retirement—we've got accounts with rates you'll enjoy.</p>
+                        <a href="#" class="card-link">Get Ascend Bank Savings →</a>
+                    </div>
+
+                    <!-- CD -->
+                    <div class="product-card">
+                        <div class="product-icon">📜</div>
+                        <h3>Certificate of Deposit</h3>
+                        <p>Earn a great fixed interest rate over a specific period to reach your financial goals.</p>
+                        <a href="#" class="card-link">Explore CDs →</a>
+                    </div>
+
+                    <!-- IRA -->
+                    <div class="product-card">
+                        <div class="product-icon">🏛️</div>
+                        <h3>IRA</h3>
+                        <p>Take advantage of tax savings and prepare for retirement with an individual retirement account.</p>
+                        <a href="#" class="card-link">Learn About IRAs →</a>
+                    </div>
+
+                    <!-- HSA -->
+                    <div class="product-card">
+                        <div class="product-icon">⚕️</div>
+                        <h3>HSA</h3>
+                        <p>Be prepared for future medical expenses with a Health Savings Account.</p>
+                        <a href="#" class="card-link">Explore HSAs →</a>
+                    </div>
+
+                    <!-- Debit Card -->
+                    <div class="product-card">
+                        <div class="product-icon">💳</div>
+                        <h3>Debit Card</h3>
+                        <p>All Checking account holders get a VISA debit card with access to Ascend Bank Rewards.</p>
+                        <a href="#" class="card-link">Learn About Debit →</a>
+                    </div>
+
+                    <!-- Deposit Rates -->
+                    <div class="product-card">
+                        <div class="product-icon">📈</div>
+                        <h3>Deposit Rates</h3>
+                        <p>Competitive rates on Checking, Savings, Money Market, and CDs.</p>
+                        <a href="#" class="card-link">See Our Deposit Rates →</a>
+                    </div>
+
+                    <!-- Home Lending & Mortgages -->
+                    <div class="product-card">
+                        <div class="product-icon">🏠</div>
+                        <h3>Mortgages</h3>
+                        <p>Turn dreams into reality with prompt, efficient service from local lending experts.</p>
+                        <a href="#" class="card-link">Explore Mortgage Options →</a>
+                    </div>
+
+                    <!-- Home Equity -->
+                    <div class="product-card">
+                        <div class="product-icon">🔑</div>
+                        <h3>Home Equity</h3>
+                        <p>Great for home updates, a vacation, or a quick source of funds.</p>
+                        <a href="#" class="card-link">Learn About Home Equity →</a>
+                    </div>
+
+                    <!-- Personal Loans -->
+                    <div class="product-card">
+                        <div class="product-icon">💵</div>
+                        <h3>Personal Loans</h3>
+                        <p>Designed to work for you when you need additional funds.</p>
+                        <a href="#" class="card-link">See Personal Loans →</a>
+                    </div>
+
+                    <!-- Lending Rates -->
+                    <div class="product-card">
+                        <div class="product-icon">📊</div>
+                        <h3>Lending Rates</h3>
+                        <p>Great, competitive rates with the flexibility to suit your needs.</p>
+                        <a href="#" class="card-link">Explore Lending Rates →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features: Online & Mobile Banking -->
+        <section class="features">
+            <div class="container">
+                <div class="features-container">
+                    <!-- Online Banking -->
+                    <div class="feature-item">
+                        <div class="feature-icon">💻</div>
+                        <h3>Online Banking Where You Are</h3>
+                        <p>Open an account, add new services, speak to someone who can help, or access a variety of helpful financial tools and resources.</p>
+                        <div class="feature-actions">
+                            <a href="#" class="btn">Visit Self Service Center</a>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Banking -->
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <h3>Powerful Mobile Banking</h3>
+                        <p>View statements, pay bills, transfer funds, and manage transactions from anywhere, anytime with the GSB YourBank app.</p>
+                        <div class="feature-actions">
+                            <a href="#" class="btn btn-outline">Download our app</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <a href="index.html" style="color: white;">SF-BANK</a>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                    <li><a href="{% url 'security' %}">Security</a></li>
+                    <li><a href="{% url 'location' %}">Locations</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 SF-BANK. All rights reserved. Member FDIC. Equal Housing Lender.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
