@@ -1,24 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checking Accounts | SF-Bank</title>
-    <style>
-        /* === Include all styles from index.html === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8fafc;
-        }
+{% block title %}Checking Accounts | Apex Trust Bank{% endblock %}
 
+{% block content %}
+   {% block extra_css %}
+<style>
         .container {
             width: 90%;
             max-width: 1200px;
@@ -68,68 +55,7 @@
             margin: 0 auto 3rem auto;
         }
 
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .logo a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #339e57;
-            background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            transition: text-shadow 1.3s ease;
-        }
-
-        .logo a:hover {
-            text-shadow: 0 0 15px rgb(55, 61, 239), 0 0 30px rgba(245, 217, 183, 0.9), 0 0 45px rgba(171, 217, 148, 0.7), 0 0 60px rgba(246, 237, 187, 0.5);
-        }
-
-        .star-icon {
-            font-size: 2.2rem;
-            line-height: 2;
-            filter: drop-shadow(0 0 8px rgb(11, 25, 158));
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover, .nav-menu a.active {
-            color: #0a4b7a;
-        }
-
-        .nav-menu .btn {
-            color: white;
-            padding: 8px 20px;
-        }
-
+       
         /* Page-specific content styles */
         .page-content {
             padding: 4rem 0;
@@ -176,76 +102,9 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
-
-        footer {
-            background-color: #1f2e3a;
-            color: #cfddee;
-            padding: 3rem 0 1.5rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #cfddee;
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #3a4c5c;
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .nav-menu {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">
-                    <a href="{% url 'home' %}">
-                        <span class="star-icon">★</span> SF-Bank
-                    </a>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'checking' %}" class="active">Checking</a></li>
-                    <li><a href="{% url 'saving' %}">Savings</a></li>
-                    <li><a href="{% url 'lending' %}">Lending</a></li>
-                    <li><a href="{% url 'rates' %}">Rates</a></li>
-                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
-                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+</style>
+{% endblock %}
+    
     <main>
         <section class="page-content">
             <div class="container">
@@ -253,7 +112,7 @@
                 <p class="section-subtitle">Maximize your money with great services and features.</p>
 
                 <div class="content-card">
-                    <h2>Why Choose SF-Bank Checking?</h2>
+                    <h2>Why Choose Apex Trust Bank Checking?</h2>
                     <p>Our checking accounts are designed to give you flexibility, security, and rewards. Whether you're looking for no-fee banking, interest earnings, or exclusive perks, we have an option for you.</p>
                     
                     <div class="feature-grid">
@@ -292,25 +151,4 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="logo">
-                    <a href="index.html" style="color: white;">SF-BANK</a>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                    <li><a href="{% url 'privacy' %}">Privacy</a></li>
-                    <li><a href="{% url 'security' %}">Security</a></li>
-                    <li><a href="{% url 'location' %}">Locations</a></li>
-                </ul>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 SF-BANK. All rights reserved. Member FDIC. Equal Housing Lender.</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

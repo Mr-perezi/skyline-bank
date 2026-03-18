@@ -1,295 +1,193 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lending Solutions | SF-Bank</title>
-    <style>
-        /* === Include all styles from index.html === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8fafc;
-        }
+{% block title %}Lending Solutions | SF-Bank{% endblock %}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
+{% block extra_css %}
+<style>
+    /* Page-specific styling for lending page */
+    .lending-hero {
+        background: linear-gradient(135deg, #e6f0f9 0%, #ffffff 100%);
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eaeef2;
+    }
 
-        .btn {
-            display: inline-block;
-            background-color: #0a4b7a;
-            color: white;
-            padding: 10px 24px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
+    .lending-hero h1 {
+        font-size: 2.5rem;
+        color: #0a4b7a;
+        margin-bottom: 1rem;
+    }
 
-        .btn:hover {
-            background-color: #0e5f9e;
-        }
+    .lending-hero p {
+        font-size: 1.2rem;
+        color: #555;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid #0a4b7a;
-            color: #0a4b7a;
-        }
+    .loan-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
 
-        .btn-outline:hover {
-            background-color: #0a4b7a;
-            color: white;
-        }
+    .loan-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem 1.5rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid #eaeef2;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .section-title {
+    .loan-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 15px 30px rgba(10,75,122,0.1);
+        border-color: #0a4b7a;
+    }
+
+    .loan-icon {
+        font-size: 2.8rem;
+        margin-bottom: 1rem;
+        color: #0a4b7a;
+    }
+
+    .loan-card h3 {
+        color: #0a4b7a;
+        font-size: 1.6rem;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #eef3f8;
+        padding-bottom: 0.5rem;
+    }
+
+    .loan-card p {
+        color: #555;
+        margin-bottom: 1.2rem;
+        flex-grow: 1;
+    }
+
+    .loan-features {
+        list-style: none;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .loan-features li {
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .loan-features li::before {
+        content: "✓";
+        color: #2e7d32;
+        font-weight: bold;
+        display: inline-block;
+        width: 1.2rem;
+    }
+
+    .loan-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 3rem 0 1rem;
+        flex-wrap: wrap;
+    }
+
+    .loan-actions .btn {
+        min-width: 200px;
+        padding: 12px 30px;
+    }
+
+    @media (max-width: 768px) {
+        .lending-hero h1 {
             font-size: 2rem;
-            color: #0a4b7a;
-            margin-bottom: 1rem;
-            text-align: center;
         }
-
-        /* === Header & Navigation === */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        .loan-grid {
+            grid-template-columns: 1fr;
         }
+    }
+</style>
+{% endblock %}
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
+{% block content %}
+    <!-- Hero Section -->
+    <section class="lending-hero">
+        <div class="container text-center">
+            <h1>Lending Solutions</h1>
+            <p>Flexible loans and mortgages designed to help you achieve your dreams – from a new car to your dream home.</p>
+        </div>
+    </section>
 
-        .logo a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #339e57;
-            background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            transition: text-shadow 1.3s ease;
-        }
-
-        .logo a:hover {
-            text-shadow: 0 0 15px rgb(55, 61, 239), 0 0 30px rgba(245, 217, 183, 0.9), 0 0 45px rgba(171, 217, 148, 0.7), 0 0 60px rgba(246, 237, 187, 0.5);
-        }
-
-        .star-icon {
-            font-size: 2.2rem;
-            line-height: 2;
-            filter: drop-shadow(0 0 8px rgb(11, 25, 158));
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover, .nav-menu a.active {
-            color: #0a4b7a;
-        }
-
-        .nav-menu .btn {
-            color: white;
-            padding: 8px 20px;
-        }
-
-        /* === Form Styles (new for registration/login) === */
-        .form-section {
-            padding: 4rem 0;
-            min-height: 60vh;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border: 1px solid #eaeef2;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #0a4b7a;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #0a4b7a;
-            box-shadow: 0 0 0 3px rgba(10,75,122,0.1);
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-check input {
-            width: auto;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .form-footer a {
-            color: #0a4b7a;
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* === Footer === */
-        footer {
-            background-color: #1f2e3a;
-            color: #cfddee;
-            padding: 3rem 0 1.5rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #cfddee;
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #3a4c5c;
-            font-size: 0.9rem;
-        }
-
-        /* === Responsive === */
-        @media (max-width: 768px) {
-            .nav-menu {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .form-container {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>...</header>
-    <main>
-        <section class="page-content">
-            <div class="container">
-                <h1 class="section-title">Lending Solutions</h1>
-                <p class="section-subtitle">Flexible loans and mortgages to help you achieve your dreams.</p>
-
-                <div class="content-card">
-                    <h2>Personal Loans</h2>
-                    <p>Need extra funds for a major purchase, debt consolidation, or unexpected expenses? Our personal loans offer competitive rates and quick approval.</p>
-                    <ul>
-                        <li>Loan amounts from $1,000 to $50,000</li>
-                        <li>Fixed rates and flexible terms</li>
-                        <li>No collateral required</li>
-                    </ul>
-                </div>
-
-                <div class="content-card">
-                    <h2>Home Lending & Mortgages</h2>
-                    <p>Turn your homeownership dreams into reality with our local lending experts. We offer prompt, efficient service for:</p>
-                    <ul>
-                        <li>Conventional fixed-rate mortgages</li>
-                        <li>Adjustable-rate mortgages (ARMs)</li>
-                        <li>FHA, VA, and USDA loans</li>
-                        <li>Jumbo loans</li>
-                    </ul>
-                </div>
-
-                <div class="content-card">
-                    <h2>Home Equity Options</h2>
-                    <p>Use the equity in your home for renovations, education, or debt consolidation. Choose from:</p>
-                    <ul>
-                        <li>Home Equity Loans (fixed rate, lump sum)</li>
-                        <li>Home Equity Lines of Credit (HELOC) – flexible draw and repayment</li>
-                    </ul>
-                </div>
-
-                <div class="content-card">
-                    <h2>Auto Loans</h2>
-                    <p>Finance a new or used car with rates that fit your budget. Quick decisions and local service.</p>
-                </div>
-
-                <p style="text-align: center; margin-top: 2rem;"><a href="{% url 'apply-loan' %}" class="btn">Apply for a Loan</a> <a href="{% url 'shedule' %}" class="btn btn-outline">Meet with a Lending Officer</a></p>
+    <div class="container">
+        <!-- Loan Products Grid -->
+        <div class="loan-grid">
+            <!-- Personal Loans Card -->
+            <div class="loan-card">
+                <div class="loan-icon">💰</div>
+                <h3>Personal Loans</h3>
+                <p>Need extra funds for a major purchase, debt consolidation, or unexpected expenses? Our personal loans offer competitive rates and quick approval.</p>
+                <ul class="loan-features">
+                    <li>Loan amounts from $1,000 to $50,000</li>
+                    <li>Fixed rates and flexible terms</li>
+                    <li>No collateral required</li>
+                </ul>
+                <a href="{% url 'apply_loan' %}" class="btn" style="align-self: center;">Apply Now</a>
             </div>
-        </section>
-    </main>
-    <footer>...</footer>
-</body>
-</html>
+
+            <!-- Mortgages Card -->
+            <div class="loan-card">
+                <div class="loan-icon">🏠</div>
+                <h3>Home Lending & Mortgages</h3>
+                <p>Turn your homeownership dreams into reality with our local lending experts. Prompt, efficient service for every need.</p>
+                <ul class="loan-features">
+                    <li>Conventional fixed-rate mortgages</li>
+                    <li>Adjustable‑rate mortgages (ARMs)</li>
+                    <li>FHA, VA, and USDA loans</li>
+                    <li>Jumbo loans</li>
+                </ul>
+                <a href="{% url 'apply_loan' %}" class="btn" style="align-self: center;">Explore Mortgages</a>
+            </div>
+
+            <!-- Home Equity Card -->
+            <div class="loan-card">
+                <div class="loan-icon">🔑</div>
+                <h3>Home Equity Options</h3>
+                <p>Use the equity in your home for renovations, education, or debt consolidation. Choose the option that fits your life.</p>
+                <ul class="loan-features">
+                    <li>Home Equity Loans (fixed rate, lump sum)</li>
+                    <li>Home Equity Lines of Credit (HELOC) – flexible draw and repayment</li>
+                </ul>
+                <a href="{% url 'apply_loan' %}" class="btn" style="align-self: center;">Learn More</a>
+            </div>
+
+            <!-- Auto Loans Card -->
+            <div class="loan-card">
+                <div class="loan-icon">🚗</div>
+                <h3>Auto Loans</h3>
+                <p>Finance a new or used car with rates that fit your budget. Quick decisions and local service – get pre‑approved today.</p>
+                <ul class="loan-features">
+                    <li>New & used car financing</li>
+                    <li>Competitive interest rates</li>
+                    <li>Fast approval process</li>
+                </ul>
+                <a href="{% url 'apply_loan' %}" class="btn" style="align-self: center;">Get Pre‑Approved</a>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="loan-actions">
+            <a href="{% url 'apply_loan' %}" class="btn">Apply for a Loan</a>
+            <a href="{% url 'schedule' %}" class="btn btn-outline">Meet with a Lending Officer</a>
+        </div>
+
+        <!-- Additional Info (optional) -->
+        <p class="text-center" style="margin: 2rem 0; color: #666;">
+            All loans subject to credit approval. Rates and terms may vary. Contact a lending officer for details.
+        </p>
+    </div>
+{% endblock %}

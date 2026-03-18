@@ -1,308 +1,212 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interest Rates | SF-Bank</title>
-    <style>
-        /* === Include all styles from index.html === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% extends 'base.html' %}
+{% load static %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8fafc;
-        }
+{% block title %}Interest Rates | SF-Bank{% endblock %}
 
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
+{% block extra_css %}
+<style>
+    /* Page-specific styling for rates page */
+    .rates-hero {
+        background: linear-gradient(135deg, #e6f0f9 0%, #ffffff 100%);
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eaeef2;
+        text-align: center;
+    }
 
-        .btn {
-            display: inline-block;
-            background-color: #0a4b7a;
-            color: white;
-            padding: 10px 24px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
+    .rates-hero h1 {
+        font-size: 2.5rem;
+        color: #0a4b7a;
+        margin-bottom: 1rem;
+    }
 
-        .btn:hover {
-            background-color: #0e5f9e;
-        }
+    .rates-hero p {
+        font-size: 1.2rem;
+        color: #555;
+        max-width: 700px;
+        margin: 0 auto;
+    }
 
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid #0a4b7a;
-            color: #0a4b7a;
-        }
+    .rates-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
 
-        .btn-outline:hover {
-            background-color: #0a4b7a;
-            color: white;
-        }
+    .rate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid #eaeef2;
+        margin-bottom: 2.5rem;
+        transition: box-shadow 0.3s ease;
+    }
 
-        .section-title {
+    .rate-card:hover {
+        box-shadow: 0 10px 30px rgba(10,75,122,0.1);
+    }
+
+    .rate-card h2 {
+        color: #0a4b7a;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #eef3f8;
+        padding-bottom: 0.75rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        border-radius: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1rem;
+        min-width: 600px;
+    }
+
+    th {
+        background-color: #0a4b7a;
+        color: white;
+        font-weight: 600;
+        padding: 12px 15px;
+        text-align: left;
+    }
+
+    td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eaeef2;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .rate-note {
+        color: #666;
+        font-style: italic;
+        margin: 1rem 0 0;
+        font-size: 0.95rem;
+    }
+
+    .rate-actions {
+        text-align: center;
+        margin: 3rem 0 2rem;
+    }
+
+    .rate-actions .btn {
+        min-width: 220px;
+        padding: 12px 30px;
+    }
+
+    @media (max-width: 768px) {
+        .rates-hero h1 {
             font-size: 2rem;
-            color: #0a4b7a;
-            margin-bottom: 1rem;
-            text-align: center;
         }
-
-        /* === Header & Navigation === */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+        .rate-card {
+            padding: 1.5rem;
         }
+    }
+</style>
+{% endblock %}
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
+{% block content %}
+    <!-- Hero Section -->
+    <section class="rates-hero">
+        <div class="container">
+            <h1>Deposit & Lending Rates</h1>
+            <p>Competitive rates to help your money grow and borrowing affordable – updated regularly.</p>
+        </div>
+    </section>
 
-        .logo a {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 2.8rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #339e57;
-            background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            transition: text-shadow 1.3s ease;
-        }
-
-        .logo a:hover {
-            text-shadow: 0 0 15px rgb(55, 61, 239), 0 0 30px rgba(245, 217, 183, 0.9), 0 0 45px rgba(171, 217, 148, 0.7), 0 0 60px rgba(246, 237, 187, 0.5);
-        }
-
-        .star-icon {
-            font-size: 2.2rem;
-            line-height: 2;
-            filter: drop-shadow(0 0 8px rgb(11, 25, 158));
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover, .nav-menu a.active {
-            color: #0a4b7a;
-        }
-
-        .nav-menu .btn {
-            color: white;
-            padding: 8px 20px;
-        }
-
-        /* === Form Styles (new for registration/login) === */
-        .form-section {
-            padding: 4rem 0;
-            min-height: 60vh;
-        }
-
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border: 1px solid #eaeef2;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #0a4b7a;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #0a4b7a;
-            box-shadow: 0 0 0 3px rgba(10,75,122,0.1);
-        }
-
-        .form-check {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-check input {
-            width: auto;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .form-footer a {
-            color: #0a4b7a;
-            text-decoration: none;
-        }
-
-        .form-footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* === Footer === */
-        footer {
-            background-color: #1f2e3a;
-            color: #cfddee;
-            padding: 3rem 0 1.5rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #cfddee;
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #3a4c5c;
-            font-size: 0.9rem;
-        }
-
-        /* === Responsive === */
-        @media (max-width: 768px) {
-            .nav-menu {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .form-container {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>...</header>
-    <main>
-        <section class="page-content">
-            <div class="container">
-                <h1 class="section-title">Deposit & Lending Rates</h1>
-                <p class="section-subtitle">Competitive rates to help your money grow and borrowing affordable.</p>
-
-                <div class="content-card">
-                    <h2>Deposit Rates (Annual Percentage Yield)</h2>
-                    <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
-                        <tr style="background:#0a4b7a; color:white;">
-                            <th style="padding:10px; text-align:left;">Account Type</th>
-                            <th style="padding:10px; text-align:left;">Minimum Balance</th>
-                            <th style="padding:10px; text-align:left;">Rate</th>
+    <div class="container rates-container">
+        <!-- Deposit Rates Card -->
+        <div class="rate-card">
+            <h2>Deposit Rates (Annual Percentage Yield)</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Account Type</th>
+                            <th>Minimum Balance</th>
+                            <th>Rate</th>
                         </tr>
-                        <tr style="border-bottom:1px solid #ddd;">
-                            <td style="padding:10px;">Savings</td>
-                            <td style="padding:10px;">$100</td>
-                            <td style="padding:10px;">0.50% APY</td>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Savings</td>
+                            <td>$100</td>
+                            <td>0.50% APY</td>
                         </tr>
-                        <tr style="border-bottom:1px solid #ddd;">
-                            <td style="padding:10px;">High-Yield Savings</td>
-                            <td style="padding:10px;">$2,500</td>
-                            <td style="padding:10px;">1.25% APY</td>
+                        <tr>
+                            <td>High-Yield Savings</td>
+                            <td>$2,500</td>
+                            <td>1.25% APY</td>
                         </tr>
-                        <tr style="border-bottom:1px solid #ddd;">
-                            <td style="padding:10px;">Money Market</td>
-                            <td style="padding:10px;">$5,000</td>
-                            <td style="padding:10px;">1.50% APY</td>
+                        <tr>
+                            <td>Money Market</td>
+                            <td>$5,000</td>
+                            <td>1.50% APY</td>
                         </tr>
-                        <tr style="border-bottom:1px solid #ddd;">
-                            <td style="padding:10px;">12-Month CD</td>
-                            <td style="padding:10px;">$1,000</td>
-                            <td style="padding:10px;">2.25% APY</td>
+                        <tr>
+                            <td>12-Month CD</td>
+                            <td>$1,000</td>
+                            <td>2.25% APY</td>
                         </tr>
-                    </table>
-                    <p><em>Rates are subject to change. Contact us for current rates on other terms.</em></p>
-                </div>
-
-                <div class="content-card">
-                    <h2>Lending Rates (Annual Percentage Rate)</h2>
-                    <table style="width:100%; border-collapse: collapse; margin: 1rem 0;">
-                        <tr style="background:#0a4b7a; color:white;">
-                            <th style="padding:10px; text-align:left;">Loan Type</th>
-                            <th style="padding:10px; text-align:left;">Typical Range</th>
-                        </tr>
-                        <tr><td style="padding:10px;">Personal Loans</td><td style="padding:10px;">6.99% – 18.99% APR</td></tr>
-                        <tr><td style="padding:10px;">Auto Loans (new)</td><td style="padding:10px;">4.99% – 8.99% APR</td></tr>
-                        <tr><td style="padding:10px;">Auto Loans (used)</td><td style="padding:10px;">5.49% – 10.99% APR</td></tr>
-                        <tr><td style="padding:10px;">Home Equity Loan</td><td style="padding:10px;">5.25% – 9.00% APR</td></tr>
-                        <tr><td style="padding:10px;">30-Year Fixed Mortgage</td><td style="padding:10px;">5.75% – 7.00% APR</td></tr>
-                    </table>
-                    <p><em>Your actual rate depends on creditworthiness and loan terms.</em></p>
-                </div>
-
-                <p style="text-align: center;"><a href="#" class="btn">View Detailed Rates</a></p>
+                    </tbody>
+                </table>
             </div>
-        </section>
-    </main>
-    <footer>...</footer>
-</body>
-</html>
+            <p class="rate-note">* Rates are subject to change. Contact us for current rates on other terms.</p>
+        </div>
+
+        <!-- Lending Rates Card -->
+        <div class="rate-card">
+            <h2>Lending Rates (Annual Percentage Rate)</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Loan Type</th>
+                            <th>Typical Range</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Personal Loans</td>
+                            <td>6.99% – 18.99% APR</td>
+                        </tr>
+                        <tr>
+                            <td>Auto Loans (new)</td>
+                            <td>4.99% – 8.99% APR</td>
+                        </tr>
+                        <tr>
+                            <td>Auto Loans (used)</td>
+                            <td>5.49% – 10.99% APR</td>
+                        </tr>
+                        <tr>
+                            <td>Home Equity Loan</td>
+                            <td>5.25% – 9.00% APR</td>
+                        </tr>
+                        <tr>
+                            <td>30-Year Fixed Mortgage</td>
+                            <td>5.75% – 7.00% APR</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="rate-note">* Your actual rate depends on creditworthiness and loan terms.</p>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="rate-actions">
+            <a href="#" class="btn">View Detailed Rates</a>
+            <a href="{% url 'schedule' %}" class="btn btn-outline">Speak with a Banker</a>
+        </div>
+    </div>
+{% endblock %}

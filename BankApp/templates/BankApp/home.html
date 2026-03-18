@@ -1,11 +1,11 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STAR FORD  Bank - Personal Banking</title>
-    <style>
+
+{% block title %}Apex Bank - Personal Banking{% endblock %}
+
+{% block content %}
+{% block extra_css %}
+<style>
         /* === Modern CSS Reset & Base Styles === */
         * {
             margin: 0;
@@ -70,75 +70,7 @@
             margin: 0 auto 3rem auto;
         }
 
-        /* === Header & Navigation === */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        /* Updated Logo CSS with Ultra View Effect */
-.logo a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 2.8rem;
-    font-weight: 700;
-    text-decoration: none;
-    color: #339e57; /* Base color becomes white to let the gradient and glow shine */
-    background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
-    -webkit-background-clip: text;
-    background-clip: text;
-    text-wrap: inherit;
-    transition: text-shadow 1.3s ease;
-}
-
-.logo a:hover {
-    text-shadow: 
-        0 0 15px rgb(55, 61, 239),
-        0 0 30px rgba(245, 217, 183, 0.9),
-        0 0 45px rgba(171, 217, 148, 0.7),
-        0 0 60px rgba(246, 237, 187, 0.5);
-}
-
-.star-icon {
-    font-size: 2.2rem; /* Slightly larger star for emphasis */
-    line-height: 2;
-    filter: drop-shadow(0 0 8px rgb(11, 25, 158));
-}
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-menu a:hover, .nav-menu a.active {
-            color: #afbcc5;
-        }
-
-        .nav-menu .btn {
-            color: white;
-            padding: 8px 20px;
-        }
-
+   
         /* === Hero Section === */
         .hero {
             background: linear-gradient(135deg, #e6f0f9 0%, #ffffff 100%);
@@ -276,45 +208,7 @@
             flex-wrap: wrap;
         }
 
-        /* === Footer === */
-        footer {
-            background-color: #1f2e3a;
-            color: #cfddee;
-            padding: 3rem 0 1.5rem;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: #cfddee;
-            text-decoration: none;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #3a4c5c;
-            font-size: 0.9rem;
-        }
-
+        
         /* === Responsive Design === */
         @media (max-width: 768px) {
             .hero-content {
@@ -336,36 +230,16 @@
             }
         }
     </style>
+{% endblock %}
+    
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav>
-                <!-- Updated Logo HTML -->
-<div class="logo">
-    <a href="{% url 'home' %}">
-        <span class="star-icon">★</span> SF-Bank
-    </a>
-</div>
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}" class="active">Home</a></li>
-                    <li><a href="{% url 'checking' %}">Checking</a></li>
-                    <li><a href="{% url 'saving' %}">Savings</a></li>
-                    <li><a href="{% url 'lending' %}">Lending</a></li>
-                    <li><a href="{% url 'rates' %}">Rates</a></li>
-                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
-                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
     <main>
         <!-- Hero Section -->
         <section class="hero">
             <div class="container hero-content">
                 <div class="hero-text">
-                    <h1>Personal Banking Solutions from SF-BANK</h1>
+                    <h1>Personal Banking Solutions from Apex Bank</h1>
                     <p>Find the right account for your needs from our wide selection of Personal Banking products! Our friendly, knowledgeable staff are here to help.</p>
                     <a href="schedule.html" class="btn">Schedule an appointment →</a>
                 </div>
@@ -491,7 +365,7 @@
                     <div class="feature-item">
                         <div class="feature-icon">📱</div>
                         <h3>Powerful Mobile Banking</h3>
-                        <p>View statements, pay bills, transfer funds, and manage transactions from anywhere, anytime with the GSB YourBank app.</p>
+                        <p>View statements, pay bills, transfer funds, and manage transactions from anywhere, anytime with the Apex Trust Bank app.</p>
                         <div class="feature-actions">
                             <a href="#" class="btn btn-outline">Download our app</a>
                         </div>
@@ -500,25 +374,4 @@
             </div>
         </section>
     </main>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="logo">
-                    <a href="index.html" style="color: white;">SF-BANK</a>
-                </div>
-                <ul class="footer-links">
-                    <li><a href="{% url 'about' %}">About Us</a></li>
-                    <li><a href="{% url 'contact' %}">Contact</a></li>
-                    <li><a href="{% url 'privacy' %}">Privacy</a></li>
-                    <li><a href="{% url 'security' %}">Security</a></li>
-                    <li><a href="{% url 'location' %}">Locations</a></li>
-                </ul>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2025 SF-BANK. All rights reserved. Member FDIC. Equal Housing Lender.</p>
-            </div>
-        </div>
-    </footer>
-</body>
-</html>
+{% endblock %}

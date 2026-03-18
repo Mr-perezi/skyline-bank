@@ -942,7 +942,7 @@ def register(request):
             email_body = f"""
 Hi {user.email},
 
-Your Skybridge Bank account has been successfully created.
+Your Apex Trust Bank account has been successfully created.
 
 Please verify your email by clicking the link below:
 {verification_link}
@@ -951,11 +951,11 @@ This link is valid for 7 days.
 
 If you did not create this account, simply ignore this message.
 
-Skybridge Bank Security Team
+Apex Trust Bank Security Team
 """
 
             send_mail(
-                subject="🎉 Welcome to Skybridge Bank – Verify Your Email",
+                subject="🎉 Welcome to Apex Trust Bank – Verify Your Email",
                 message=email_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[user.email],

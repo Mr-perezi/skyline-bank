@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Apex Trust Bank | Personal Banking{% endblock %}</title>
+    <!-- Base CSS (same as before, plus mobile menu styles) -->
+    <style>
+        /* === Modern CSS Reset & Base Styles === */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Segoe UI',sans-serif; line-height:1.6; color:#333; background:#f8fafc; }
+        .container { width:90%; max-width:1200px; margin:0 auto; padding:0 15px; }
+        .btn { display:inline-block; background:#0a4b7a; color:white; padding:10px 24px; border-radius:5px; text-decoration:none; font-weight:600; transition:background 0.3s; border:none; cursor:pointer; }
+        .btn:hover { background:#0e5f9e; }
+        .btn-outline { background:transparent; border:2px solid #0a4b7a; color:#0a4b7a; }
+        .btn-outline:hover { background:#0a4b7a; color:white; }
+        .section-title { font-size:2rem; color:#0a4b7a; margin-bottom:1rem; text-align:center; }
+        .section-subtitle { text-align:center; color:#555; max-width:700px; margin:0 auto 3rem auto; }
+
+        /* === Header & Navigation (enhanced with mobile slide-out) === */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        .logo a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: #339e57;
+            background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            transition: text-shadow 1.3s ease;
+        }
+        .logo a:hover {
+            text-shadow: 0 0 15px rgb(55,61,239), 0 0 30px rgba(245,217,183,0.9), 0 0 45px rgba(171,217,148,0.7), 0 0 60px rgba(246,237,187,0.5);
+        }
+        .star-icon {
+            font-size: 2.2rem;
+            line-height: 2;
+            filter: drop-shadow(0 0 8px rgb(11,25,158));
+        }
+
+        /* Desktop menu */
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #0a4b7a;
+        }
+        .nav-menu .btn {
+            color: white;
+            padding: 8px 20px;
+        }
+
+        /* Mobile menu toggle (hamburger) */
+        .menu-toggle {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            user-select: none;
+            z-index: 1001;
+        }
+
+        /* Sidebar overlay (hidden by default) */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Slide-out menu */
+        .sidebar-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+        .sidebar-menu.active {
+            right: 0;
+        }
+        .sidebar-menu .close-btn {
+            font-size: 2rem;
+            text-align: right;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            color: #0a4b7a;
+        }
+        .sidebar-menu ul {
+            list-style: none;
+        }
+        .sidebar-menu li {
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 1.2rem;
+            display: block;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eaeef2;
+        }
+        .sidebar-menu a:hover {
+            color: #0a4b7a;
+        }
+        .sidebar-menu .btn {
+            display: block;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        /* === Footer === */
+        footer {
+            background-color: #1f2e3a;
+            color: #cfddee;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: #cfddee;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            color: white;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #3a4c5c;
+            font-size: 0.9rem;
+        }
+
+        /* === Responsive: switch to mobile menu === */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none; /* hide desktop menu */
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .features-container {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Extra block for page-specific styles */
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <a href="{% url 'home' %}">
+                        <span class="star-icon">★</span> Apex Trust Bank
+                    </a>
+                </div>
+
+                <!-- Desktop navigation -->
+                <ul class="nav-menu">
+                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+                    <li><a href="{% url 'checking' %}" class="{% if request.resolver_match.url_name == 'checking' %}active{% endif %}">Checking</a></li>
+                    <li><a href="{% url 'saving' %}" class="{% if request.resolver_match.url_name == 'saving' %}active{% endif %}">Savings</a></li>
+                    <li><a href="{% url 'lending' %}" class="{% if request.resolver_match.url_name == 'lending' %}active{% endif %}">Lending</a></li>
+                    <li><a href="{% url 'rates' %}" class="{% if request.resolver_match.url_name == 'rates' %}active{% endif %}">Rates</a></li>
+                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
+                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
+                </ul>
+
+                <!-- Hamburger icon (mobile) -->
+                <div class="menu-toggle" id="menuToggle">☰</div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Slide-out sidebar (mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="close-btn" id="closeBtn">✕</div>
+        <ul>
+            <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
+            <li><a href="{% url 'checking' %}" class="{% if request.resolver_match.url_name == 'checking' %}active{% endif %}">Checking</a></li>
+            <li><a href="{% url 'saving' %}" class="{% if request.resolver_match.url_name == 'saving' %}active{% endif %}">Savings</a></li>
+            <li><a href="{% url 'lending' %}" class="{% if request.resolver_match.url_name == 'lending' %}active{% endif %}">Lending</a></li>
+            <li><a href="{% url 'rates' %}" class="{% if request.resolver_match.url_name == 'rates' %}active{% endif %}">Rates</a></li>
+            <li><a href="{% url 'register' %}" class="btn" style="margin:1rem 0;">Register</a></li>
+            <li><a href="{% url 'user_login' %}" class="btn btn-outline">Login</a></li>
+        </ul>
+    </div>
+
+    <!-- Main content area (to be filled by child templates) -->
+    <main>
+        {% block content %}
+        <!-- Default content (if any) -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <a href="{% url 'home' %}" style="color: white;">Apex Trust Bank</a>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy</a></li>
+                    <li><a href="{% url 'security' %}">Security</a></li>
+                    <li><a href="{% url 'location' %}">Locations</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <p>&copy; {% now "Y" %} Apex Trust Bank. All rights reserved. Member FDIC. Equal Housing Lender.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for mobile menu -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebarMenu');
+            const overlay = document.getElementById('sidebarOverlay');
+            const closeBtn = document.getElementById('closeBtn');
+
+            function openMenu() {
+                sidebar.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // prevent scrolling
+            }
+
+            function closeMenu() {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            menuToggle.addEventListener('click', openMenu);
+            closeBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

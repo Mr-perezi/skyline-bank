@@ -190,9 +190,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sskybridge513@gmail.com'
-EMAIL_HOST_PASSWORD = 'fket lmyj nciu ovrc'
-DEFAULT_FROM_EMAIL = 'Skybridge Bank <sskybridge513@gmail.com>'
+EMAIL_HOST_USER = 'trustbankapex@gmail.com'
+EMAIL_HOST_PASSWORD = 'egmt ojnz uqbg ppjw'
+DEFAULT_FROM_EMAIL = 'Apex Trust Bank <trustbankapex@gmail.com>'
 
 
 # Default primary key field type
