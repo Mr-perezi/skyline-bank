@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Apex Trust Bank | Personal Banking{% endblock %}</title>
-    <!-- Base CSS (same as before, plus mobile menu styles) -->
+    <!-- Font Awesome (for icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* === Modern CSS Reset & Base Styles === */
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -18,7 +19,7 @@
         .section-title { font-size:2rem; color:#0a4b7a; margin-bottom:1rem; text-align:center; }
         .section-subtitle { text-align:center; color:#555; max-width:700px; margin:0 auto 3rem auto; }
 
-        /* === Header & Navigation (enhanced with mobile slide-out) === */
+        /* === Header & Navigation === */
         header {
             background-color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -32,57 +33,63 @@
             align-items: center;
             padding: 1rem 0;
         }
+
+        /* redesigned logo */
         .logo a {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 2.8rem;
+            gap: 10px;
+            font-size: 2rem;
             font-weight: 700;
             text-decoration: none;
-            color: #339e57;
-            background: linear-gradient(135deg, #839ab7, #d1c8b5, #5947aa);
+            color: #1a3b5c;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .logo-icon {
+            background: linear-gradient(145deg, #1e4b7a, #0a2f4f);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0,40,80,0.2);
+        }
+        .logo-text {
+            background: linear-gradient(135deg, #1e3b5c, #2b5a8c);
             -webkit-background-clip: text;
             background-clip: text;
-            transition: text-shadow 1.3s ease;
-        }
-        .logo a:hover {
-            text-shadow: 0 0 15px rgb(55,61,239), 0 0 30px rgba(245,217,183,0.9), 0 0 45px rgba(171,217,148,0.7), 0 0 60px rgba(246,237,187,0.5);
-        }
-        .star-icon {
-            font-size: 2.2rem;
-            line-height: 2;
-            filter: drop-shadow(0 0 8px rgb(11,25,158));
+            color: transparent;
         }
 
-        /* Desktop menu */
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-            align-items: center;
-        }
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        .nav-menu a:hover,
-        .nav-menu a.active {
+        /* desktop toggle (visible on desktop) */
+        .desktop-menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            cursor: pointer;
             color: #0a4b7a;
+            background: none;
+            border: none;
+            padding: 0 0.5rem;
         }
-        .nav-menu .btn {
-            color: white;
-            padding: 8px 20px;
+        .desktop-menu-toggle:hover {
+            color: #0e5f9e;
         }
 
-        /* Mobile menu toggle (hamburger) */
-        .menu-toggle {
+        /* mobile toggle (hidden on desktop) */
+        .mobile-menu-toggle {
             display: none;
             font-size: 2rem;
             cursor: pointer;
-            user-select: none;
-            z-index: 1001;
+            color: #0a4b7a;
+            background: none;
+            border: none;
+            padding: 0 0.5rem;
+        }
+        .mobile-menu-toggle:hover {
+            color: #0e5f9e;
         }
 
         /* Sidebar overlay (hidden by default) */
@@ -100,7 +107,7 @@
             display: block;
         }
 
-        /* Slide-out menu */
+        /* Slide-out menu (right side) – used for both desktop and mobile */
         .sidebar-menu {
             position: fixed;
             top: 0;
@@ -183,13 +190,21 @@
             font-size: 0.9rem;
         }
 
-        /* === Responsive: switch to mobile menu === */
-        @media (max-width: 768px) {
-            .nav-menu {
-                display: none; /* hide desktop menu */
+        /* === Responsive toggles === */
+        @media (min-width: 769px) {
+            .desktop-menu-toggle {
+                display: block;   /* show desktop toggle on desktop */
             }
-            .menu-toggle {
-                display: block;
+            .mobile-menu-toggle {
+                display: none;    /* hide mobile toggle on desktop */
+            }
+        }
+        @media (max-width: 768px) {
+            .desktop-menu-toggle {
+                display: none;    /* hide desktop toggle on mobile */
+            }
+            .mobile-menu-toggle {
+                display: block;   /* show mobile toggle on mobile */
             }
             .hero-content {
                 flex-direction: column;
@@ -212,30 +227,26 @@
     <header>
         <div class="container">
             <nav>
+                <!-- redesigned logo -->
                 <div class="logo">
                     <a href="{% url 'home' %}">
-                        <span class="star-icon">★</span> Apex Trust Bank
+                        <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                        <span class="logo-text">Apex Trust Bank</span>
                     </a>
                 </div>
 
-                <!-- Desktop navigation -->
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
-                    <li><a href="{% url 'checking' %}" class="{% if request.resolver_match.url_name == 'checking' %}active{% endif %}">Checking</a></li>
-                    <li><a href="{% url 'saving' %}" class="{% if request.resolver_match.url_name == 'saving' %}active{% endif %}">Savings</a></li>
-                    <li><a href="{% url 'lending' %}" class="{% if request.resolver_match.url_name == 'lending' %}active{% endif %}">Lending</a></li>
-                    <li><a href="{% url 'rates' %}" class="{% if request.resolver_match.url_name == 'rates' %}active{% endif %}">Rates</a></li>
-                    <li><a href="{% url 'register' %}" class="btn">Register</a></li>
-                    <li><a href="{% url 'user_login' %}" class="btn">Login</a></li>
-                </ul>
+                <!-- Desktop toggle (visible on desktop) -->
+                <button class="desktop-menu-toggle" id="desktopMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
 
-                <!-- Hamburger icon (mobile) -->
-                <div class="menu-toggle" id="menuToggle">☰</div>
+                <!-- Mobile toggle (visible on mobile) -->
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
             </nav>
         </div>
     </header>
 
-    <!-- Slide-out sidebar (mobile) -->
+    <!-- Slide-out sidebar (right side) – used for both desktop and mobile -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="close-btn" id="closeBtn">✕</div>
@@ -249,11 +260,10 @@
             <li><a href="{% url 'user_login' %}" class="btn btn-outline">Login</a></li>
         </ul>
     </div>
-
-    <!-- Main content area (to be filled by child templates) -->
+<br><br>
+    <!-- Main content area -->
     <main>
         {% block content %}
-        <!-- Default content (if any) -->
         {% endblock %}
     </main>
 
@@ -277,10 +287,11 @@
         </div>
     </footer>
 
-    <!-- JavaScript for mobile menu -->
+    <!-- JavaScript for menus -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const menuToggle = document.getElementById('menuToggle');
+            const mobileToggle = document.getElementById('mobileMenuToggle');
+            const desktopToggle = document.getElementById('desktopMenuToggle');
             const sidebar = document.getElementById('sidebarMenu');
             const overlay = document.getElementById('sidebarOverlay');
             const closeBtn = document.getElementById('closeBtn');
@@ -288,7 +299,7 @@
             function openMenu() {
                 sidebar.classList.add('active');
                 overlay.classList.add('active');
-                document.body.style.overflow = 'hidden'; // prevent scrolling
+                document.body.style.overflow = 'hidden';
             }
 
             function closeMenu() {
@@ -297,9 +308,10 @@
                 document.body.style.overflow = '';
             }
 
-            menuToggle.addEventListener('click', openMenu);
-            closeBtn.addEventListener('click', closeMenu);
-            overlay.addEventListener('click', closeMenu);
+            if (mobileToggle) mobileToggle.addEventListener('click', openMenu);
+            if (desktopToggle) desktopToggle.addEventListener('click', openMenu);
+            if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+            if (overlay) overlay.addEventListener('click', closeMenu);
         });
     </script>
 

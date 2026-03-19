@@ -715,6 +715,13 @@ def loan_review(request):
     Review loan application before submission.
     Updated to handle new fields while preserving original functionality.
     """
+    try:
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.update_savings()
+    except UserProfile.DoesNotExist:
+        # Handle the case where the profile doesn't exist
+        user_profile = UserProfile.objects.create(user=request.user)
+
     data = request.session.get('loan_data')
 
     if not data:
@@ -815,7 +822,8 @@ def loan_review(request):
         'numeric_duration': numeric_duration,
         'processing_fee': processing_fee,
         'monthly_installment': round(monthly_installment, 2),
-        'loan_to_income_ratio': round(loan_to_income_ratio, 1)
+        'loan_to_income_ratio': round(loan_to_income_ratio, 1),
+        'user_profile': user_profile,
     }
     
     # Add formatted dates for display

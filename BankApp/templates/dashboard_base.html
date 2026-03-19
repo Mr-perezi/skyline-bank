@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Apex Trust Bank{% endblock %}</title>
-    <!-- Chart.js, Chaport, Font Awesome, Google Fonts, Bootstrap, PWA - same as before -->
+    <!-- Chart.js, Chaport, Font Awesome, Google Fonts, Bootstrap, PWA -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,9 +21,8 @@
     <link rel="apple-touch-icon" href="{{ icons.180 }}">
     <link rel="manifest" href="{{ manifest_path }}">
     <meta name="theme-color" content="{{ theme_color }}">
-    <!-- Base CSS (includes navbar, footer, and common styles) -->
     <style>
-        /* === base styles (copied from your provided CSS) === */
+        /* === base styles === */
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Segoe UI',sans-serif; line-height:1.6; color:#333; background:#f8fafc; }
         .container { width:90%; max-width:1200px; margin:0 auto; padding:0 15px; }
@@ -33,46 +32,262 @@
         .btn-outline:hover { background:#0a4b7a; color:white; }
         .section-title { font-size:2rem; color:#0a4b7a; margin-bottom:1rem; text-align:center; }
 
-        /* header / nav */
+        /* header */
         header { background:white; box-shadow:0 2px 10px rgba(0,0,0,0.1); position:sticky; top:0; z-index:100; }
         nav { display:flex; justify-content:space-between; align-items:center; padding:1rem 0; }
-        .logo a { display:flex; align-items:center; gap:8px; font-size:2.2rem; font-weight:700; text-decoration:none; background:linear-gradient(135deg,#1e3b5c,#2b5a8c); -webkit-background-clip:text; background-clip:text; color:transparent; transition:text-shadow 0.3s; }
-        .logo a:hover { text-shadow:0 0 12px rgba(10,75,122,0.4); }
-        .star-icon { font-size:2rem; color:#f5b342; filter:drop-shadow(0 0 4px #f0c15a); }
-        .nav-menu { display:flex; list-style:none; gap:2rem; align-items:center; }
-        .nav-menu a { text-decoration:none; color:#333; font-weight:500; transition:color 0.3s; }
-        .nav-menu a:hover, .nav-menu a.active { color:#0a4b7a; }
-        .nav-menu .btn { color:white; padding:8px 20px; }
-        .hamburger { display:none; font-size:2rem; cursor:pointer; color:#0a4b7a; background:none; border:none; padding:0 0.5rem; }
-        .hamburger:hover { color:#0e5f9e; }
 
-        /* mobile slide-out menu */
-        .mobile-menu { position:fixed; top:0; left:-300px; width:280px; height:100%; background:white; box-shadow:2px 0 15px rgba(0,0,0,0.1); transition:left 0.3s; z-index:200; padding:2rem 1.5rem; overflow-y:auto; }
-        .mobile-menu.open { left:0; }
-        .mobile-menu .close-btn { text-align:right; font-size:2rem; color:#7b8ba3; cursor:pointer; margin-bottom:1.5rem; }
-        .mobile-menu .close-btn:hover { color:#0a1c2f; }
-        .mobile-menu ul { list-style:none; }
-        .mobile-menu li { margin-bottom:1.2rem; }
-        .mobile-menu a { text-decoration:none; color:#1f3b5c; font-weight:600; font-size:1.2rem; display:block; padding:0.5rem 0; border-bottom:1px solid #eef2f6; }
-        .mobile-menu a:hover { color:#0a4b7a; }
-        .mobile-menu .user-row { display:flex; align-items:center; gap:0.8rem; margin-top:2rem; padding-top:1rem; border-top:2px solid #eef2f6; }
-        .mobile-menu .user-row i { font-size:1.8rem; color:#0a4b7a; }
-        .mobile-menu .user-row span { font-weight:600; }
-        .mobile-menu .logout-btn { background:#e4eef9; color:#0a4b7a; text-align:center; padding:0.8rem; border-radius:40px; margin-top:1rem; font-weight:600; border:none; width:100%; cursor:pointer; }
-        .menu-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:150; }
-        .menu-overlay.active { display:block; }
+        /* redesigned logo */
+        .logo a {
+            display:flex;
+            align-items:center;
+            gap:10px;
+            font-size:2rem;
+            font-weight:700;
+            text-decoration:none;
+            color:#1a3b5c;
+            font-family:'Montserrat',sans-serif;
+        }
+        .logo-icon {
+            background: linear-gradient(145deg, #1e4b7a, #0a2f4f);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0,40,80,0.2);
+        }
+        .logo-text {
+            background: linear-gradient(135deg, #1e3b5c, #2b5a8c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* desktop menu toggle (visible on desktop) */
+        .desktop-menu-toggle {
+            display: none; /* hidden on mobile, shown on desktop via media query */
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #0a4b7a;
+            background: none;
+            border: none;
+            padding: 0 0.5rem;
+        }
+        .desktop-menu-toggle:hover {
+            color: #0e5f9e;
+        }
+
+        /* desktop slide-out menu */
+        .desktop-menu {
+            position: fixed;
+            top: 0;
+            right: -320px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 200;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+        .desktop-menu.open {
+            right: 0;
+        }
+        .desktop-menu .close-btn {
+            text-align: right;
+            font-size: 2rem;
+            color: #7b8ba3;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+        .desktop-menu .close-btn:hover {
+            color: #0a1c2f;
+        }
+        .desktop-menu ul {
+            list-style: none;
+        }
+        .desktop-menu li {
+            margin-bottom: 1.2rem;
+        }
+        .desktop-menu a {
+            text-decoration: none;
+            color: #1f3b5c;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid #eef2f6;
+            transition: color 0.2s;
+        }
+        .desktop-menu a:hover {
+            color: #0a4b7a;
+        }
+        .desktop-menu .user-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eef2f6;
+        }
+        .desktop-menu .user-row i {
+            font-size: 1.8rem;
+            color: #0a4b7a;
+        }
+        .desktop-menu .user-row span {
+            font-weight: 600;
+        }
+        .desktop-menu .logout-btn {
+            background: #e4eef9;
+            color: #0a4b7a;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 40px;
+            margin-top: 1rem;
+            font-weight: 600;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+        .desktop-menu .logout-btn:hover {
+            background: #cde1f2;
+        }
+
+        /* mobile menu (left) – unchanged */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 280px;
+            height: 100%;
+            background: white;
+            box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+            transition: left 0.3s;
+            z-index: 200;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+        .mobile-menu.open { left: 0; }
+        .mobile-menu .close-btn {
+            text-align: right;
+            font-size: 2rem;
+            color: #7b8ba3;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+        }
+        .mobile-menu .close-btn:hover { color: #0a1c2f; }
+        .mobile-menu ul { list-style: none; }
+        .mobile-menu li { margin-bottom: 1.2rem; }
+        .mobile-menu a {
+            text-decoration: none;
+            color: #1f3b5c;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: block;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eef2f6;
+        }
+        .mobile-menu a:hover { color: #0a4b7a; }
+        .mobile-menu .user-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eef2f6;
+        }
+        .mobile-menu .user-row i { font-size: 1.8rem; color: #0a4b7a; }
+        .mobile-menu .user-row span { font-weight: 600; }
+        .mobile-menu .logout-btn {
+            background: #e4eef9;
+            color: #0a4b7a;
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 40px;
+            margin-top: 1rem;
+            font-weight: 600;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* overlay */
+        .menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 150;
+        }
+        .menu-overlay.active { display: block; }
 
         /* footer */
-        footer { background:#1f2e3a; color:#cfddee; padding:3rem 0 1.5rem; margin-top:2rem; }
-        .footer-content { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; margin-bottom:2rem; }
-        .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
-        .footer-links a { color:#cfddee; text-decoration:none; }
-        .footer-links a:hover { color:white; }
-        .copyright { text-align:center; padding-top:2rem; border-top:1px solid #3a4c5c; font-size:0.9rem; }
+        footer {
+            background: #1f2e3a;
+            color: #cfddee;
+            padding: 3rem 0 1.5rem;
+            margin-top: 2rem;
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        .footer-links a { color: #cfddee; text-decoration: none; }
+        .footer-links a:hover { color: white; }
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #3a4c5c;
+            font-size: 0.9rem;
+        }
 
         /* responsive */
-        @media (max-width:768px) { .nav-menu { display:none; } .hamburger { display:block; } }
-        /* Page-specific styles will be added via extra_css */
+        @media (min-width: 769px) {
+            .hamburger { display: none; }          /* hide mobile hamburger on desktop */
+            .desktop-menu-toggle { display: block; } /* show desktop toggle */
+        }
+        @media (max-width: 768px) {
+            .desktop-menu-toggle { display: none; } /* hide desktop toggle on mobile */
+            .hamburger { display: block;
+             font-size: 1.8rem;
+            cursor: pointer;
+            color: #0a4b7a;
+            background: none;
+            border: none;
+            padding: 0 0.5rem; }
+        }
+           /* Add to your CSS file */
+.staff-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #2A6EBB;
+}
+
+.staff-header {
+    color: #2A6EBB;
+    font-weight: bold;
+    padding: 10px 15px;
+    background: rgba(42, 110, 187, 0.1);
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
         {% block extra_css %}{% endblock %}
     </style>
 </head>
@@ -81,58 +296,88 @@
     <header>
         <div class="container">
             <nav>
+                <!-- redesigned logo -->
                 <div class="logo">
                     <a href="{% url 'home' %}">
-                        <span class="star-icon">★</span> Apex Trust Bank
+                        <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+                        <span class="logo-text">Apex Trust Bank</span>
                     </a>
                 </div>
-                <!-- desktop navigation -->
-                <ul class="nav-menu">
-                    <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a></li>
-                    <li><a href="{% url 'checking' %}" class="{% if request.resolver_match.url_name == 'checking' %}active{% endif %}">Checking</a></li>
-                    <li><a href="{% url 'saving' %}" class="{% if request.resolver_match.url_name == 'saving' %}active{% endif %}">Savings</a></li>
-                    <li><a href="{% url 'lending' %}" class="{% if request.resolver_match.url_name == 'lending' %}active{% endif %}">Lending</a></li>
-                    <li><a href="{% url 'rates' %}" class="{% if request.resolver_match.url_name == 'rates' %}active{% endif %}">Rates</a></li>
-                    <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a></li>
-                    <li><a href="{% url 'bank_transfer' %}" class="{% if request.resolver_match.url_name == 'bank_transfer' %}active{% endif %}">Withdraw</a></li>
-                    <li><a href="{% url 'transaction' %}" class="{% if request.resolver_match.url_name == 'transaction' %}active{% endif %}">History</a></li>
-                    <li><a href="#"><i class="far fa-user-circle"></i> {{ user_profile.first_name }}</a></li>
-                    <li><a href="{% url 'LogOut' %}" class="btn">Logout</a></li>
-                </ul>
-                <!-- hamburger icon for mobile -->
+
+                <!-- desktop toggle (visible on desktop) -->
+                <button class="desktop-menu-toggle" id="desktopMenuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <!-- mobile hamburger (hidden on desktop) -->
                 <button class="hamburger" id="hamburgerBtn">☰</button>
             </nav>
         </div>
     </header>
 
-    <!-- mobile slide-out menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="close-btn" id="closeMenuBtn">&times;</div>
+    <!-- DESKTOP slide-out menu (right side) -->
+    <div class="desktop-menu" id="desktopMenu">
+        <div class="close-btn" id="closeDesktopBtn">&times;</div>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            <li><a href="{% url 'checking' %}">Checking</a></li>
-            <li><a href="{% url 'saving' %}">Savings</a></li>
-            <li><a href="{% url 'lending' %}">Lending</a></li>
-            <li><a href="{% url 'rates' %}">Rates</a></li>
-            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li><a href="{% url 'bank_transfer' %}">Withdraw</a></li>
-            <li><a href="{% url 'transaction' %}">History</a></li>
+            <li><a href="{% url 'apply_loan' %}">Loans</a></li>
+            <li><a href="{% url 'application_for_credit_card' %}">Apply for Card</a></li>
+            <li><a href="{% url 'investment_dashboard' %}">Investments</a></li>
+            <li><a href="{% url 'create_investment' %}">Create investment</a></li>
+            <li><a href="{% url 'card_list' %}">Cards</a></li>
+
         </ul>
+         <!-- STAFF ONLY SECTION -->
+        {% if request.user.is_staff %}
+            <li class="staff-section">
+                <div class="staff-header">
+                    <i class="fas fa-shield-alt"></i> Staff Panel
+                </div>
+            </li>
+            <li class="staff-option">
+                <a href="{% url 'manage_loans' %}">
+                    <i class="fas fa-file-invoice-dollar"></i> Manage Loans
+                </a>
+            </li>
+            <li class="staff-option">
+                <a href="/admin/" target="_blank">
+                    <i class="fas fa-cogs"></i> Django Admin
+                </a>
+            </li>
+        {% endif %}
+        <!-- END STAFF SECTION -->
         <div class="user-row">
             <i class="far fa-user-circle"></i>
-            <span>{{ user.get_full_name|default:user.username }}</span>
+            <span>{{ user_profile.first_name }} {{ user_profile.last_name }}</span>
         </div>
         <button class="logout-btn" onclick="window.location.href='{% url 'LogOut' %}';">Logout</button>
     </div>
+
+    <!-- MOBILE slide-out menu (left side) – unchanged -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="close-btn" id="closeMenuBtn">&times;</div>
+        <ul>
+            <li><a href="{% url 'apply_loan' %}">Loan</a></li>
+            <li><a href="{% url 'application_for_credit_card' %}">Apply for Card</a></li>
+            <li><a href="{% url 'create_investment' %}">Investment</a></li>
+            <li><a href="{% url 'card_list' %}">Cards</a></li>
+            <li><a href="{% url 'investment_dashboard' %}">Investment Dashboard</a></li>
+        </ul>
+        <div class="user-row">
+            <i class="far fa-user-circle"></i>
+            <span>{{ user_profile.first_name }} {{ user_profile.last_name }}</span>
+        </div>
+        <button class="logout-btn" onclick="window.location.href='{% url 'LogOut' %}';">Logout</button>
+    </div>
+
     <!-- overlay -->
     <div class="menu-overlay" id="menuOverlay"></div>
 
-    <!-- Main Content Area (to be filled by child templates) -->
+    <!-- Main content -->
     <main>
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
+    <!-- Footer (unchanged) -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -153,40 +398,78 @@
         </div>
     </footer>
 
-    <!-- JavaScript for mobile menu only -->
+    <!-- JavaScript for menus -->
     <script>
         (function() {
+            // Mobile menu
             const hamburger = document.getElementById('hamburgerBtn');
             const mobileMenu = document.getElementById('mobileMenu');
-            const overlay = document.getElementById('menuOverlay');
-            const closeBtn = document.getElementById('closeMenuBtn');
+            const closeMobileBtn = document.getElementById('closeMenuBtn');
 
-            function openMenu() {
+            // Desktop menu
+            const desktopToggle = document.getElementById('desktopMenuToggle');
+            const desktopMenu = document.getElementById('desktopMenu');
+            const closeDesktopBtn = document.getElementById('closeDesktopBtn');
+
+            const overlay = document.getElementById('menuOverlay');
+
+            function openMobile() {
                 mobileMenu.classList.add('open');
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
-
-            function closeMenu() {
+            function closeMobile() {
                 mobileMenu.classList.remove('open');
+                if (!desktopMenu.classList.contains('open')) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            function openDesktop() {
+                desktopMenu.classList.add('open');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeDesktop() {
+                desktopMenu.classList.remove('open');
+                if (!mobileMenu.classList.contains('open')) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            function closeAll() {
+                mobileMenu.classList.remove('open');
+                desktopMenu.classList.remove('open');
                 overlay.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
-            if (hamburger) hamburger.addEventListener('click', openMenu);
-            if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-            if (overlay) overlay.addEventListener('click', closeMenu);
+            if (hamburger) hamburger.addEventListener('click', openMobile);
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeMobile);
 
-            // Close menu when a link is clicked
-            const menuLinks = mobileMenu.querySelectorAll('a');
-            menuLinks.forEach(link => {
-                link.addEventListener('click', closeMenu);
+            if (desktopToggle) desktopToggle.addEventListener('click', openDesktop);
+            if (closeDesktopBtn) closeDesktopBtn.addEventListener('click', closeDesktop);
+
+            if (overlay) overlay.addEventListener('click', closeAll);
+
+            // Close menu when a link is clicked (for both menus)
+            const mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('a') : [];
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', closeAll);
+            });
+            const desktopLinks = desktopMenu ? desktopMenu.querySelectorAll('a') : [];
+            desktopLinks.forEach(link => {
+                link.addEventListener('click', closeAll);
             });
 
             // Escape key
             window.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-                    closeMenu();
+                if (e.key === 'Escape') {
+                    if (mobileMenu.classList.contains('open') || desktopMenu.classList.contains('open')) {
+                        closeAll();
+                    }
                 }
             });
         })();
