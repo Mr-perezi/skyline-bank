@@ -32,8 +32,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.uqhcfoxivhymyrjzprvf',
+        'PASSWORD': 'E0hIRINkiuAhGfBV  ',  # Replace with your actual password
+        'HOST': 'aws-1-us-west-1.pooler.supabase.com',
+        'PORT': '6543',
+        'OPTIONS': {
+            # Disable server-side cursors to avoid PREPARE statement issues
+            'options': '-c default_transaction_read_only=off',
+            'client_encoding': 'UTF8',
+        },
+        'CONN_MAX_AGE': 600,  # Optional: connection persistence in seconds
     }
 }
 cloudinary.config(
