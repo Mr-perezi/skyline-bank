@@ -1,18 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
-
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
@@ -32,7 +23,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <title>IMF Code - Skybridge Finance</title>
+    <title>IMF Code - Apex Trust Bank</title>
     <style>
         :root {
             --primary-color: #06A3DA;
@@ -115,7 +106,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             font-size: 1.1rem;
         }
         
-        .form-control {
+        input {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid #e9ecef;
@@ -126,7 +117,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             background-color: white;
         }
         
-        .form-control:focus {
+        input:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(6, 163, 218, 0.1);
             outline: none;
@@ -206,7 +197,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
             <p class="security-subtitle">Enhanced Security Verification</p>
             
             <div class="user-greeting">
-                Dear{{ user_profile.first_name }}, {{ user_profile.last_name }},
+                Dear {{ user_profile.first_name }} {{ user_profile.last_name }}
             </div>
             
             <p class="security-message">
@@ -236,7 +227,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
                 <div class="info-card">
                     <p class="info-text">
                         Thank you for your cooperation.<br>
-                        <strong>Best regards,<br>Skybridge Finance Security Team</strong>
+                        <strong>Best regards,<br>Apex Trust Bank Security Team</strong>
                     </p>
                 </div>
                 

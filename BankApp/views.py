@@ -264,7 +264,7 @@ def approve_loan(request, loan_id):
         if user_email:
             try:
                 send_mail(
-                    subject="Loan Approved - SkyBridge Finance",
+                    subject="Loan Approved - Apex Trust Bank",
                     message=(
                         f"Hello {loan.user.get_full_name() or loan.user.username},\n\n"
                         f"Congratulations! Your loan application (ID: #{loan.id}) has been approved.\n\n"
@@ -283,7 +283,7 @@ def approve_loan(request, loan_id):
                         f"You will receive the funds within 2-3 business days.\n\n"
                         "If you have any questions, please contact our support team.\n\n"
                         "Best regards,\n"
-                        "SkyBridge Finance Team\n"
+                        "Apex Trust Bank Team\n"
                         "support@skybridgefinance.online"
                     ),
                     from_email=settings.DEFAULT_FROM_EMAIL,
@@ -341,7 +341,7 @@ def reject_loan(request, loan_id):
         if user_email:
             try:
                 send_mail(
-                    subject="Loan Application Update - SkyBridge Finance",
+                    subject="Loan Application Update - Apex Trust Bank",
                     message=(
                         f"Hello {loan.user.get_full_name() or loan.user.username},\n\n"
                         f"We regret to inform you that your loan application (ID: #{loan.id}) "
@@ -352,9 +352,9 @@ def reject_loan(request, loan_id):
                         f"Amount Requested: ${loan.amount:,.2f}\n"
                         f"Loan Type: {loan.loan_type}\n"
                         f"Purpose: {loan.purpose if loan.purpose else loan.loan_type}\n\n"
-                        f"Thank you for considering SkyBridge Finance for your lending needs.\n\n"
+                        f"Thank you for considering Apex Trust Bank for your lending needs.\n\n"
                         "Best regards,\n"
-                        "SkyBridge Finance Team\n"
+                        "Apex Trust Bank Team\n"
                         "support@skybridgefinance.online"
                     ),
                     from_email=settings.DEFAULT_FROM_EMAIL,
@@ -708,6 +708,28 @@ def apply_loan(request):
         'user_profile': user_profile,
         'page_title': 'Apply for Loan'
     })
+
+@login_required(login_url='user_login')
+def withdrawal(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    
+    # Get all withdrawals (transactions where description contains 'withdrawal')
+    withdrawals = Transaction.objects.filter(
+        user=request.user,
+        description__icontains='withdrawal'
+    ).order_by('-timestamp')
+    
+    recent_withdrawals = withdrawals[:5]
+    total_withdrawn = withdrawals.aggregate(total=models.Sum('amount'))['total'] or 0
+    
+    context = {
+        'user_profile': user_profile,
+        'recent_withdrawals': recent_withdrawals,
+        'total_withdrawn': total_withdrawn,
+        'balance': user_profile.balance,
+        'currency': user_profile.currency,
+    }
+    return render(request, 'BankApp/withdrawal.html', context)
 
 @login_required
 def loan_review(request):
@@ -1604,7 +1626,7 @@ def cashapp(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1633,7 +1655,7 @@ def crypto(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1783,7 +1805,7 @@ def bank_transfer(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1816,7 +1838,7 @@ def paypal(request):
                     else:
                         request.session['pending_amount'] = str(deposit_amount)
 
-                        return redirect('bic')  # Redirect to dashboard view after processing the deposit
+                        return redirect('imf')  # Redirect to dashboard view after processing the deposit
             except ValidationError as e:
                 form.add_error(None, str(e))
     else:
@@ -1967,7 +1989,6 @@ def vat(request):
     }
     return render(request, 'BankApp/vat.html', context)
 
-
 @login_required(login_url='user_login')
 def imf(request):
     try:
@@ -1991,7 +2012,7 @@ def imf(request):
                             'form': form
                         })
 
-                    # Optional: Check for sufficient balance
+                    # Check for sufficient balance
                     if user_profile.balance < amount_decimal:
                         form.add_error(None, 'Insufficient balance to complete transaction.')
                         return render(request, 'BankApp/imf.html', {
@@ -2003,12 +2024,12 @@ def imf(request):
                     user_profile.balance -= amount_decimal
                     user_profile.save()
 
-                    # Create transaction
+                    # Create transaction – now clearly marked as a withdrawal
                     Transaction.objects.create(
                         user=user_profile.user,
                         amount=amount_decimal,
                         balance_after=user_profile.balance,
-                        description='Pending'
+                        description='Pending Withdrawal'   # ← changed from 'Pending'
                     )
                     del request.session['pending_amount']
                 return redirect('tac')

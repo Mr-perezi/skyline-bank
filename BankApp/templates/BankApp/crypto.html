@@ -5,19 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skybridge Finance - Crypto Transfer</title>
+    <title>Apex Trust Bank - Crypto Transfer</title>
     <link rel="icon" href="{% static 'images/IMG-20250820-WA0109.jpg' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/dash.css' %}" >
 <!-- Begin of Chaport Live Chat code -->
-<script type="text/javascript">
-(function(w,d,v3){
-w.chaportConfig = {
-  appId : '698184ca2764117339b24bdd',
-};
 
-if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push(arguments)};v3.on=function(e,fn){if(!v3._l[e])v3._l[e]=[];v3._l[e].push(fn)};var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://app.chaport.com/javascripts/insert.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss)})(window, document);
-</script>
-<!-- End of Chaport Live Chat code -->
     <!-- Favicons -->
     <link rel="icon" type="image/png" sizes="32x32" href="{{ icons.32 }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ icons.16 }}">
@@ -595,7 +587,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         </div>
         <div class="user-details">
             <p>Name: <strong>{{ user_profile.first_name }}, {{ user_profile.last_name }}</strong></p>
-            <p>Email: <strong>{{ user_profile.email }}</strong></p>
+            <p>Email: <strong>{{ user.email }}</strong></p>
         </div>
         <ul>
             <li><a href="{% url 'profile' %}">Profile</a></li>
@@ -616,7 +608,7 @@ if(w.chaport)return;v3=w.chaport={};v3._q=[];v3._l={};v3.q=function(){v3._q.push
         <div class="transfer-header">Blockchain Payment</div>
 
         <div class="form-container">
-            <h1>Skybridge Finance</h1>
+            <h1>Apex Trust Bank</h1>
 
             <!-- Animated Balance -->
             <div class="animated-balance" id="animatedBalance">

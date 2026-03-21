@@ -1,0 +1,357 @@
+{% extends 'dashboard_base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}Withdraw Funds - Apex Trust Bank{% endblock %}
+
+{% block extra_css %}
+<style>
+    .withdrawal-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Balance Summary Card */
+    .balance-summary {
+        background-color: aliceblue;
+        border-radius: 24px;
+        padding: 50px;
+        margin-bottom: 30px;
+        margin:50px;
+        color: #000;
+        box-shadow: 0 15px 30px rgba(10, 25, 47, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .balance-info h3 {
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.9;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .balance-amount {
+        font-size: 2.8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .balance-amount span {
+        font-size: 2rem;
+        opacity: 0.8;
+    }
+
+    .total-withdrawn {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 15px 25px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .total-withdrawn .label {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        margin-bottom: 5px;
+    }
+
+    .total-withdrawn .value {
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+
+    /* Payment Options Grid */
+    .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        padding:50px;
+        margin-bottom: 40px;
+    }
+
+    .payment-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        border: 1px solid var(--medium-gray);
+        transition: all 0.3s ease;
+        text-decoration: none;
+        color: var(--text-dark);
+        display: block;
+    }
+
+    .payment-card:hover {
+        text-decoration:none;
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(42,110,187,0.15);
+        border-color: var(--primary-blue);
+    }
+
+    .payment-icon {
+        width: 70px;
+        height: 70px;
+        background-color: rgba(42,110,187,0.15);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 2rem;
+        color: var(--primary-blue);
+        border: 2px solid var(--medium-gray);
+        transition: all 0.3s;
+    }
+
+    .payment-card:hover .payment-icon {
+        border-color: var(--primary-blue);
+        background-color: #000;
+        color: white;
+        text-decoration:none;
+    }
+
+    .payment-title {
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        color: var(--dark-blue);
+    }
+
+    .payment-desc {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    /* Recent Withdrawals Section */
+    .recent-section {
+        padding:50px;
+        background: white;
+        border-radius: 24px;
+        padding: 25px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+        border: 1px solid var(--medium-gray);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-header h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--dark-blue);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-header a {
+        color: var(--primary-blue);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .section-header a:hover {
+        color: var(--dark-blue);
+    }
+
+    .transaction-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .transaction-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: var(--soft-gray);
+        border-radius: 12px;
+        border-left: 4px solid var(--medium-gray);
+        transition: all 0.3s ease;
+    }
+
+    .transaction-item:hover {
+        background: white;
+        border-left-color: var(--primary-blue);
+        box-shadow: 0 5px 15px rgba(42,110,187,0.1);
+        transform: translateX(4px);
+    }
+
+    .transaction-info h4 {
+        font-weight: 600;
+        color: var(--dark-blue);
+        margin-bottom: 4px;
+    }
+
+    .transaction-info p {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        margin: 0;
+    }
+
+    .transaction-amount {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--error); /* negative amount */
+    }
+
+    .transaction-amount.positive {
+        color: var(--success);
+    }
+
+    .no-transactions {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-light);
+    }
+
+    /* Toggle Balance Button */
+    .toggle-balance-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 30px;
+        padding: 6px 16px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-left: 15px;
+        transition: all 0.3s;
+    }
+
+    .toggle-balance-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    @media (max-width: 600px) {
+        .balance-summary {
+            flex-direction: column;
+            text-align: center;
+        }
+        .payment-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="withdrawal-container">
+    <!-- Balance Summary Card -->
+    <div class="balance-summary">
+        <div class="balance-info">
+            <h3>Available Balance <button class="toggle-balance-btn" id="toggleBalance"><i class="fas fa-eye"></i> Show</button></h3>
+            <div class="balance-amount">
+                <span id="balanceValue">{{ currency }}{{ balance|intcomma }}</span>
+                <span id="balanceHidden" style="display: none;">●●●●●●</span>
+            </div>
+        </div>
+        <div class="total-withdrawn">
+            <div class="label">Total Withdrawn</div>
+            <div class="value">{{ currency }}{{ total_withdrawn|intcomma }}</div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Methods Grid -->
+    <h2 style="color: var(--dark-blue); margin: 50px;">Choose Withdrawal Method</h2>
+    <div class="payment-grid">
+        <a href="{% url 'bank_transfer' %}" class="payment-card">
+            <div class="payment-icon">
+                <i class="fas fa-university"></i>
+            </div>
+            <h3 class="payment-title">Bank Transfer</h3>
+            <p class="payment-desc">Withdraw directly to your bank account</p>
+        </a>
+        <a href="{% url 'crypto' %}" class="payment-card">
+            <div class="payment-icon">
+                <i class="fab fa-bitcoin"></i>
+            </div>
+            <h3 class="payment-title">Cryptocurrency</h3>
+            <p class="payment-desc">BTC, ETH, USDT – low fees</p>
+        </a>
+        <a href="{% url 'paypal' %}" class="payment-card">
+            <div class="payment-icon">
+                <i class="fab fa-paypal"></i>
+            </div>
+            <h3 class="payment-title">PayPal</h3>
+            <p class="payment-desc">Instant withdrawal to your PayPal account</p>
+        </a>
+       <a href="{% url 'cashapp' %}" class="payment-card">
+    <div class="payment-icon">
+        <i class="fas fa-dollar-sign"></i>
+    </div>
+    <h3 class="payment-title">Cash App</h3>
+    <p class="payment-desc">Send money via Cash App</p>
+</a>
+    </div>
+
+    <!-- Recent Withdrawals -->
+    <div class="recent-section">
+        <div class="section-header">
+            <h3><i class="fas fa-history" style="color: var(--primary-blue);"></i> Recent Withdrawals</h3>
+            <a href="{% url 'transaction' %}">View All <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="transaction-list">
+            {% for tx in recent_withdrawals %}
+            <div class="transaction-item">
+                <div class="transaction-info">
+                    <h4>{{ tx.description|default:"Withdrawal" }}</h4>
+                    <p>{{ tx.timestamp|date:"M d, Y · H:i" }}</p>
+                </div>
+                <div class="transaction-amount">
+                    -{{ currency }}{{ tx.amount|floatformat:2|intcomma }}
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-transactions">
+                <i class="fas fa-inbox" style="font-size: 3rem; color: var(--medium-gray); margin-bottom: 15px;"></i>
+                <p>You haven't made any withdrawals yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Balance toggle
+        const toggleBtn = document.getElementById('toggleBalance');
+        const balanceValue = document.getElementById('balanceValue');
+        const balanceHidden = document.getElementById('balanceHidden');
+        let isVisible = true;
+
+        if (toggleBtn && balanceValue && balanceHidden) {
+            toggleBtn.addEventListener('click', function() {
+                if (isVisible) {
+                    balanceValue.style.display = 'none';
+                    balanceHidden.style.display = 'inline';
+                    toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Hide';
+                } else {
+                    balanceValue.style.display = 'inline';
+                    balanceHidden.style.display = 'none';
+                    toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Show';
+                }
+                isVisible = !isVisible;
+            });
+        }
+    });
+</script>
+{% endblock %}
