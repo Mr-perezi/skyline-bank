@@ -29,23 +29,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # OR keep as string but use os.path.join:
 
 # bank_site/settings.py
+# In your settings.py, replace the hardcoded database config with:
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres.uqhcfoxivhymyrjzprvf',
-        'PASSWORD': 'E0hIRINkiuAhGfBV  ',  # Replace with your actual password
-        'HOST': 'aws-1-us-west-1.pooler.supabase.com',
-        'PORT': '6543',
-        'OPTIONS': {
-            # Disable server-side cursors to avoid PREPARE statement issues
-            'options': '-c default_transaction_read_only=off',
-            'client_encoding': 'UTF8',
-        },
-        'CONN_MAX_AGE': 600,  # Optional: connection persistence in seconds
+# Use environment variable for database URL
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    # Parse the URL if it's set (for production)
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
     }
-}
+else:
+    # Local development (SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 cloudinary.config(
     cloud_name="dlzn0moho",
     api_key="563396395915366",

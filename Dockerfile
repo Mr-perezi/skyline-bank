@@ -1,4 +1,3 @@
-
 # Use official Python image
 FROM python:3.11-slim
 
@@ -17,17 +16,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
-COPY skyline-bank/requirements.txt .
+COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the full Django project
-COPY skyline-bank/ /app/
+COPY . /app/
 
-# Run Django setup commands
+# Run only static files collection during build
 RUN python manage.py collectstatic --no-input
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-RUN python manage.py create_admin
 
 # Expose port
 EXPOSE 8000
