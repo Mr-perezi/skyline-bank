@@ -9,8 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-SUPERUSER_EMAIL = 'skylinebank@gmail.com'
-SUPERUSER_PASSWORD = 'Me12sleep'
+
 import os
 from pathlib import Path
 import dj_database_url
@@ -18,62 +17,33 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-
-
-## Change this:
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# To either:
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# OR keep as string but use os.path.join:
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-# Use environment variable for database URL (Production only)
-DATABASE_URL = os.environ.get('DATABASE_URL')
-
-if DATABASE_URL:
-    # Production database configuration
-    DATABASES = {
-        'default': dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True  # Recommended for production databases
-        )
-    }
-else:
-    # If no DATABASE_URL, raise an error (production only)
-    raise ValueError("DATABASE_URL environment variable is required for production!")
-
+# Cloudinary configuration
 cloudinary.config(
     cloud_name="dlzn0moho",
     api_key="563396395915366",
     api_secret="pCSSrLNvxfFSEzY4ZnaOiF5u93o"
 )
 
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-os%ceh%!b_zte(60bvi9)pujn1v#lyuh^u4l!hr+_-5)rmf&9-')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
-#CSRF_TRUSTED_ORIGINS = ['']
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
 # Application definition
-
 INSTALLED_APPS = [
     'jazzmin',
     'django.contrib.admin',
@@ -95,13 +65,13 @@ AUTH_USER_MODEL = 'custom_user.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Moved up for better performance
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'bank_site.urls'
@@ -125,6 +95,41 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bank_site.wsgi.application'
 
+# Database configuration
+# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+
+# Use environment variable for database URL
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+# Check if we're in a build/collectstatic context
+# During Docker build, we might not have DATABASE_URL, so we use a dummy database
+IS_COLLECTSTATIC = os.environ.get('IS_COLLECTSTATIC', 'False') == 'True'
+
+if DATABASE_URL and not IS_COLLECTSTATIC:
+    # Production database configuration (only when not collecting static files)
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+elif IS_COLLECTSTATIC:
+    # During collectstatic, use a dummy database configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',  # Use in-memory database for static collection
+        }
+    }
+else:
+    # Fallback for local development (or if DATABASE_URL is not set)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -144,18 +149,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -166,23 +166,12 @@ STATIC_URL = 'static/'
 # Directory where collectstatic will collect static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Optional: additional directories to look for static files
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-if not DEBUG:
-    # Production: use WhiteNoise for serving static files
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-else:
-    # Development: use default storage (or Cloudinary if desired)
-    STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
-    pass
-
-# Additional locations of static files
+# Additional directories to look for static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Main static directory
-    os.path.join(BASE_DIR, 'static', 'js'),  # Directory for JavaScript files
-    os.path.join(BASE_DIR, 'static', 'img'),  # Directory for SASS files
-    os.path.join(BASE_DIR, 'static', 'css'),  # Directory for compiled CSS files
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static', 'js'),
+    os.path.join(BASE_DIR, 'static', 'img'),
+    os.path.join(BASE_DIR, 'static', 'css'),
     os.path.join(BASE_DIR, 'static', 'lib'),
     os.path.join(BASE_DIR, 'static', 'lib', 'animate'),
     os.path.join(BASE_DIR, 'static', 'lib', 'counterup'),
@@ -191,13 +180,17 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static', 'lib', 'owlcarousel', 'assets'),
     os.path.join(BASE_DIR, 'static', 'lib', 'waypoints'),
     os.path.join(BASE_DIR, 'static', 'lib', 'wow'),
-    # Add more directories if needed
 ]
 
+# Static files storage
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -206,8 +199,5 @@ EMAIL_HOST_USER = 'trustbankapex@gmail.com'
 EMAIL_HOST_PASSWORD = 'egmt ojnz uqbg ppjw'
 DEFAULT_FROM_EMAIL = 'Apex Trust Bank <trustbankapex@gmail.com>'
 
-
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
