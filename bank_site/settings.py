@@ -28,15 +28,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # OR keep as string but use os.path.join:
 
-# bank_site/settings.py
-# In your settings.py, replace the hardcoded database config with:
 
-# Use environment variable for database URL
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# Use environment variable for database URL (Production only)
 DATABASE_URL = os.environ.get('DATABASE_URL')
-    # Parse the URL if it's set (for production)
+
+if DATABASE_URL:
+    # Production database configuration
     DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True  # Recommended for production databases
+        )
     }
+else:
+    # If no DATABASE_URL, raise an error (production only)
+    raise ValueError("DATABASE_URL environment variable is required for production!")
 
 cloudinary.config(
     cloud_name="dlzn0moho",
