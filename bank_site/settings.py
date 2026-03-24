@@ -126,21 +126,10 @@ USE_I18N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'static', 'js'),
-    os.path.join(BASE_DIR, 'static', 'img'),
-    os.path.join(BASE_DIR, 'static', 'css'),
-    os.path.join(BASE_DIR, 'static', 'lib'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'animate'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'counterup'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'easing'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'owlcarousel'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'owlcarousel', 'assets'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'waypoints'),
-    os.path.join(BASE_DIR, 'static', 'lib', 'wow'),
 ]
 
 # Define STATICFILES_STORAGE to avoid the error
