@@ -5,25 +5,23 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Copy application
 COPY . .
 
-# Create static directory and collect static files
+# Create staticfiles directory and copy Django admin static files
 RUN mkdir -p /app/staticfiles && \
-    python manage.py collectstatic --no-input
+    python -c "import os, shutil; from django.contrib import admin; source = os.path.join(os.path.dirname(admin.__file__), 'static', 'admin'); dest = '/app/staticfiles/admin'; shutil.copytree(source, dest) if os.path.exists(source) else print('Source not found')"
 
-# Expose port
+# Run collectstatic
+RUN python manage.py collectstatic --no-input
+
 EXPOSE 8000
 
-# Run gunicorn
 CMD ["gunicorn", "bank_site.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -146,6 +146,12 @@ STATICFILES_DIRS = [
     admin_static,  # Add Django's admin static files
 ]
 
+# WhiteNoise configuration
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_ALLOW_ALL_ORIGINS = True
+WHITENOISE_ROOT = STATIC_ROOT
+
 # Static files storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
