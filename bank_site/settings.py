@@ -3,6 +3,7 @@ Django settings for bank_site project.
 """
 
 import os
+import django
 from pathlib import Path
 import sys
 import dj_database_url
@@ -130,15 +131,22 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-
 # Static files (CSS, JavaScript, Images)
+
+
 STATIC_URL = '/static/'
-STATIC_ROOT = '/app/staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Get Django's admin static path
+django_path = os.path.dirname(django.__file__)
+admin_static = os.path.join(django_path, 'contrib', 'admin', 'static')
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    admin_static,  # Add Django's admin static files
 ]
 
-# Define STATICFILES_STORAGE to avoid the error
+# Static files storage
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
