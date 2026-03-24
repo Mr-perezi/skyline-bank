@@ -47,3 +47,7 @@ primary_region = "iad"
   memory = "512mb"
   cpu_kind = "shared"
   cpus = 1
+
+[[mounts]]
+  source = "static_volume"
+  destination = "/app/staticfiles"
