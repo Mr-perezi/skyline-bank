@@ -23,6 +23,9 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the full Django project
 COPY . /app/
 
+# Create staticfiles directory
+RUN mkdir -p /app/staticfiles
+
 # Run only static files collection during build (with dummy database)
 RUN python manage.py collectstatic --no-input
 
