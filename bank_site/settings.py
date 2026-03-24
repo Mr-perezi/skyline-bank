@@ -85,19 +85,21 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 IS_COLLECTSTATIC = 'collectstatic' in sys.argv
 
 if DATABASE_URL and not IS_COLLECTSTATIC:
+    # Parse the URL for production
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            ssl_require=True,
-            engine='django.db.backends.postgresql',
-            OPTIONS={
-                'client_encoding': 'UTF8',
-                'connect_timeout': 10,
-            }
+            ssl_require=True
         )
     }
+    # Add OPTIONS separately if needed
+    DATABASES['default']['OPTIONS'] = {
+        'client_encoding': 'UTF8',
+        'connect_timeout': 10,
+    }
 elif IS_COLLECTSTATIC:
+    # During collectstatic, use in-memory SQLite
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -105,6 +107,7 @@ elif IS_COLLECTSTATIC:
         }
     }
 else:
+    # Fallback for local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
