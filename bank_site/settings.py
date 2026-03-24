@@ -81,11 +81,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bank_site.wsgi.application'
 # Database configuration
+import sys
+import dj_database_url
+
 DATABASE_URL = os.environ.get('DATABASE_URL')
 IS_COLLECTSTATIC = 'collectstatic' in sys.argv
 
 if DATABASE_URL and not IS_COLLECTSTATIC:
-    # Parse the URL for production
+    # Production database configuration
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
@@ -93,13 +96,13 @@ if DATABASE_URL and not IS_COLLECTSTATIC:
             ssl_require=True
         )
     }
-    # Add OPTIONS separately if needed
+    # Add connection options after config
     DATABASES['default']['OPTIONS'] = {
         'client_encoding': 'UTF8',
         'connect_timeout': 10,
     }
 elif IS_COLLECTSTATIC:
-    # During collectstatic, use in-memory SQLite
+    # During collectstatic, use temporary database
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -107,7 +110,7 @@ elif IS_COLLECTSTATIC:
         }
     }
 else:
-    # Fallback for local development
+    # Local development fallback
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
